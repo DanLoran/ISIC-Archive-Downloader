@@ -203,14 +203,17 @@ def confirm_arguments(args):
 
     print('Use {0} processes to download the archive'.format(args.p))
 
-    res = input('Do you confirm your choices? [Y/n] ')
+    if(args.quiet == 0):
+        res = input('Do you confirm your choices? [Y/n] ')
 
-    while res not in ['y', '', 'n']:
-        res = input('Invalid input. Do you confirm your choices? [Y/n] ')
-    if res in ['y', '']:
+        while res not in ['y', '', 'n']:
+            res = input('Invalid input. Do you confirm your choices? [Y/n] ')
+        if res in ['y', '']:
+            return True
+        if res == 'n':
+            return False
+    else:
         return True
-    if res == 'n':
-        return False
 
 
 def parse_args(args):
@@ -233,9 +236,10 @@ def parse_args(args):
     parser.add_argument('--seg-dir', help='The directory in which the segmentation of '
                                           'the images will be downloaded to',
                         default=join('Data', 'Segmentation'))
-    parser.add_argument('--seg-skill', help='The preffered skill level of the segmentations (novice \ expert)',
+    parser.add_argument('--seg-skill', help='The prefered skill level of the segmentations (novice \ expert)',
                         default=None, choices=['novice', 'expert'])
     parser.add_argument('--p', type=int, help='The number of processes to use in parallel', default=16)
+    parser.add_argument('--q', type=int, help='Does not prompt the user for confirmation on their download', default=0)
     parsed_args = parser.parse_args(args)
     return parsed_args
 
